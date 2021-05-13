@@ -16,8 +16,8 @@ def character_transform(character):
 def main():
     data = read_data(sys.stdin)
     for words in data:
-        for index, word in enumerate(words[:-1].lower()):
-            c1, c2 = map(character_transform, words[index:index+2])
+        for index in range(len(words) - 1):
+            c1, c2 = map(character_transform, words[index:index+2].lower())
             sys.stdout.write(f'{c1}-{c2}\t{1}\n')
 
 
