@@ -6,7 +6,12 @@ from const import ACCEPTED_CHARACTERS, SPACE_ALIAS, SPECIAL_CHARACTER_ALIAS, MAT
 CHARACTERS = ACCEPTED_CHARACTERS.replace(' ', SPACE_ALIAS) + SPECIAL_CHARACTER_ALIAS
 
 
-def to_matrix(input_stream: str):
+def to_matrix(input_stream: str) -> np.ndarray:
+    """
+    Creates a numpy matrix of the results of the reducer.
+    :param input_stream: output string from reducer
+    :return: letter frequency matrix
+    """
     matrix = np.zeros([len(CHARACTERS)] * 2)
 
     for line in input_stream.split('\n'):
@@ -19,6 +24,9 @@ def to_matrix(input_stream: str):
 
 
 def main():
+    """
+    Creates trained matrix for a specific language using the reduce results.
+    """
     language = sys.argv[1]
     np.savetxt(MATRIX_PATH / f'{language}.txt', to_matrix(sys.stdin.read()), fmt='%.8f')
 

@@ -5,14 +5,14 @@ from operator import itemgetter
 from typing import TextIO
 
 
-def read_mapper_output(file_name: TextIO, separator='\t'):
+def read_mapper_output(input_stream: TextIO, separator='\t') -> str:
     """
     Reads the results of the mapper function.
     :param file_name: a TextIO object
     :param separator: to split the results
     :return: generator object
     """
-    for line in file_name:
+    for line in input_stream:
         yield line.rstrip().split(separator, 1)
 
 

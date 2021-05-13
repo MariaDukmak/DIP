@@ -17,7 +17,7 @@ def read_data(file_name: TextIO):
         yield line.strip()
 
 
-def character_transform(character: str):
+def character_transform(character: str) -> str:
     """
     Transform unexpected character to a '!'. Also replace whitespaces with '_'.
     :param character: a string character
