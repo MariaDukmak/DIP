@@ -20,7 +20,7 @@ def main():
     for words in data:
         for index in range(len(words) - 1):
             c1, c2 = map(character_transform, words[index:index+2].lower())
-            sys.stdout.write(f'{c1}-{c2}\t{1}\n')
+            sys.stdout.write(f'{c1}{CHARACTER_SPLITTER}{c2}\t{1}\n')
 
 
 if __name__ == "__main__":

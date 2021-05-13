@@ -12,9 +12,9 @@ def read_mapper_output(file_name: TextIO, separator='\t'):
 
 def main():
     data = read_mapper_output(sys.stdin)
-    for current_word, group in groupby(data, itemgetter(0)):
-        total = sum(int(count) for current_word, count in group)
-        sys.stdout.write(f"{current_word}\t{total}\n")
+    for current_comb, group in groupby(data, itemgetter(0)):
+        total = sum(int(count) for _, count in group)
+        sys.stdout.write(f"{current_comb}\t{total}\n")
 
 
 if __name__ == "__main__":
