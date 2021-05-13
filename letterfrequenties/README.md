@@ -9,7 +9,7 @@ Onze mini Hadoop oftewel "Hadopy", is via pip te installeren. Voor meer check de
 ## Algoritme trainen 
 Voor het tranien van ons algoritme hebben we gebruik gemaakt van twee verschillende teksten dat kan je [hier](https://github.com/MariaDukmak/DIP/tree/main/letterfrequenties/tekst) vinden. 
 
-Het algoritme soort het volgende op deze teksten:
+Het algoritme scoort het volgende op deze teksten:
 
 *alice.txt*
 ```bash 
