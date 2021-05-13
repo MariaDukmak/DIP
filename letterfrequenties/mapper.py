@@ -1,21 +1,35 @@
-"""mapper."""
+"""Mapper file that wil map the text to pairs of letters. """
 import sys
 from typing import TextIO
 from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE_ALIAS
 
+# The alphabet letters
 accepted_characters = set(ACCEPTED_CHARACTERS)
 
 
 def read_data(file_name: TextIO):
+    """
+    Reads the file and removes any leading and trailing characters.
+    :param file_name: sys.stdin
+    :return: generator object
+    """
     for line in file_name:
         yield line.strip()
 
 
 def character_transform(character: str):
+    """
+    Transform unexpected character to a '!'. Also replace whitespaces with '_'.
+    :param character: a string character
+    :return: str of the new character
+    """
     return '!' if character not in accepted_characters else character.replace(' ', SPACE_ALIAS)
 
 
 def main():
+    """
+    Reads the file, split words in paris of letters and count it.
+    """
     data = read_data(sys.stdin)
     for words in data:
         for index in range(len(words) - 1):
