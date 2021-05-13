@@ -1,4 +1,3 @@
-# Distributed Processing
 ## Analyse letterfrequenties
 
 Voor het maken van deze opdracht was aanbevolen om Hadoop te gebruiken voor de map-reduce functionaliteit. Wij hebben veel moeite gehad om Hadoop werkend te krijgen, daarom hadden we besloten om een eigen Hadoop versie te maken om map-reduce in Python mogelijk te maken. 
