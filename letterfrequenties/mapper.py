@@ -1,16 +1,18 @@
 """mapper."""
 import sys
+from typing import TextIO
+from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE_ALIAS
 
-accepted_characters = set('abcdefghijklmnopqrstuwxyz ')
+accepted_characters = set(ACCEPTED_CHARACTERS)
 
 
-def read_data(file_name):
+def read_data(file_name: TextIO):
     for line in file_name:
         yield line.strip()
 
 
-def character_transform(character):
-    return '!' if character not in accepted_characters else character.replace(' ', '_')
+def character_transform(character: str):
+    return '!' if character not in accepted_characters else character.replace(' ', SPACE_ALIAS)
 
 
 def main():

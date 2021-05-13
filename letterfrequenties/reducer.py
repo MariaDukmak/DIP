@@ -2,10 +2,11 @@
 import sys
 from itertools import groupby
 from operator import itemgetter
+from typing import TextIO
 
 
-def read_mapper_output(file, separator='\t'):
-    for line in file:
+def read_mapper_output(file_name: TextIO, separator='\t'):
+    for line in file_name:
         yield line.rstrip().split(separator, 1)
 
 

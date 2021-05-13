@@ -1,3 +1,4 @@
+"""Makes a numpy matrix of the map-reduce results."""
 import sys
 import numpy as np
 
