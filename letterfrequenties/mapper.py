@@ -1,19 +1,19 @@
 """Mapper file that wil map the text to pairs of letters. """
 import sys
 from typing import TextIO
-from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE_ALIAS
+from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE
 
 # The alphabet letters
 accepted_characters = set(ACCEPTED_CHARACTERS)
 
 
-def read_data(file_name: TextIO):
+def read_data(input_stream: TextIO) -> str:
     """
     Reads the file and removes any leading and trailing characters.
-    :param file_name: sys.stdin
+    :param input_stream: sys.stdin
     :return: generator object
     """
-    for line in file_name:
+    for line in input_stream:
         yield line.strip()
 
 
@@ -23,7 +23,7 @@ def character_transform(character: str) -> str:
     :param character: a string character
     :return: str of the new character
     """
-    return '!' if character not in accepted_characters else character.replace(' ', SPACE_ALIAS)
+    return '!' if character not in accepted_characters else character.replace(' ', SPACE)
 
 
 def main():

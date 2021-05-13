@@ -1,9 +1,7 @@
 """Makes a numpy matrix of the map-reduce results."""
 import sys
 import numpy as np
-from const import ACCEPTED_CHARACTERS, SPACE_ALIAS, SPECIAL_CHARACTER_ALIAS, MATRIX_PATH, CHARACTER_SPLITTER
-
-CHARACTERS = ACCEPTED_CHARACTERS.replace(' ', SPACE_ALIAS) + SPECIAL_CHARACTER_ALIAS
+from const import MATRIX_PATH, CHARACTER_SPLITTER, CHARACTERS
 
 
 def to_matrix(input_stream: str) -> np.ndarray:

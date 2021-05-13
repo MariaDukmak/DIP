@@ -1,24 +1,24 @@
 ## Analyse letterfrequenties
 
-Voor het maken van deze opdracht was aanbevolen om Hadoop te gebruiken voor de map-reduce functionaliteit. Wij hebben veel moeite gehad om Hadoop werkend te krijgen, daarom hadden we besloten om een eigen Hadoop versie te maken om map-reduce in Python mogelijk te maken. 
+Voor het maken van deze opdracht was aanbevolen om Hadoop te gebruiken voor de map-reduce functionaliteit. Wij hebben veel moeite gehad om Hadoop werkend te krijgen, daarom hadden we besloten om een eigen Hadoop-geïnspireerde programma te maken om in dezelfde stijl map reduce parallel uit te voeren. 
 
-Onze mini Hadoop oftewel "Hadopy", is via pip te installeren. Voor meer check deze link [Hadopy](https://github.com/MariaDukmak/Hadopy). 
+Onze mini Hadoop oftewel "[Hadopy](https://github.com/MariaDukmak/Hadopy)", is via pip te installeren.
 
 
 ## Algoritme trainen 
-Voor het tranien van ons algoritme hebben we gebruik gemaakt van twee verschillende teksten dat kan je [hier](https://github.com/MariaDukmak/DIP/tree/main/letterfrequenties/tekst) vinden. 
+Voor het "trainen" van ons algoritme hebben we gebruik gemaakt van twee verschillende teksten dat kan je [hier](https://github.com/MariaDukmak/DIP/tree/main/letterfrequenties/tekst) vinden. 
 
 Het algoritme scoort het volgende op deze teksten:
 
 *alice.txt*
 ```bash 
-$ type .\tekst\alice.txt |  hadopy --m  "python mapper.py" --r  "python reducer.py" |  python matrix_saver.py nederlands.txt
+$ cat tekst/alice.txt |  hadopy --m  "python mapper.py" --r  "python reducer.py" |  python matrix_saver.py nederlands.txt
 
 ```
 
 *theoldway.txt*
 ```bash 
-$ type .\tekst\theoldway.txt |  hadopy --m  "python mapper.py" --r  "python reducer.py" |  python matrix_saver.py engels.txt
+$ cat tekst/theoldway.txt |  hadopy --m  "python mapper.py" --r  "python reducer.py" |  python matrix_saver.py engels.txt
 
 ```
 __hier een screenshot van de resultaten plakken__
@@ -49,11 +49,11 @@ Om dit programma te runnen zou je de volgende command eerst moeten runnen:
 __Met hadopy__
 
 ```bash 
-$ type .\tekst\sentences.nl-en.txt | hadopy --m  "python mapper.py" --r  "python reducer.py" |  python classifier.py
+$ cat tekst/sentences.nl-en.txt | hadopy --m  "python mapper.py" --r  "python reducer.py" |  python classifier.py
 ```
 
 __Zonder hadopy__
 
 ```bash 
-$ type .\tekst\sentences.nl-en.txt | python mapper.py | sort | python reducer.py |  python classifier.py
+$ cat tekst/sentences.nl-en.txt | python mapper.py | sort | python reducer.py |  python classifier.py
 ```
