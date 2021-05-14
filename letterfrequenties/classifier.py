@@ -11,6 +11,25 @@ def mse(matrix1: np.ndarray, matrix2: np.ndarray) -> float:
     return (np.square(matrix1 - matrix2)).mean()
 
 
+"""
+The Project Gutenberg EBook of Alice in Wonderland, by Lewis Carroll
+This eBook is for the use of anyone anywhere at no cost and with almost no
+van de toen bekende wereld. Op de kaden wemelde het van zeelieden,
+terms of the Project Gutenberg License online at www.gutenberg.org
+
+mapper ->
+# engels-nederlands
+1-0
+1-0
+0-1
+1-0
+
+reducer ->
+
+3-1
+"""
+
+
 def scanner():
     classes = {os.path.basename(path).replace('.txt', ''): np.loadtxt(path) for path in glob.glob(str(MATRIX_PATH / '*.txt'))}
     counter = np.zeros(len(classes), dtype=np.int)
