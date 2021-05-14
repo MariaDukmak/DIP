@@ -11,10 +11,26 @@ def mse(matrix1: np.ndarray, matrix2: np.ndarray) -> float:
     return (np.square(matrix1 - matrix2)).mean()
 
 
+def scanner():
+    classes = {os.path.basename(path).replace('.txt', ''): np.loadtxt(path) for path in glob.glob(str(MATRIX_PATH / '*.txt'))}
+    counter = np.zeros(len(classes), dtype=np.int)
+    for line in sys.stdin:
+        row = line.rstrip('\n')
+        # Hallo dit is een zin
+        # h-i 2
+        # l-o 3
+        matrix = to_matrix(row)
+        min_index = np.argmin(np.array(mse(matrix, class_matrix) for class_matrix in classes.values()))
+        counter[min_index] += 1
+
+    for language, count in zip(classes.keys(), counter):
+        print(f"{language}: \t{count}")
+
+
 def main():
     predict_matrix: np.ndarray = to_matrix(sys.stdin.read())
     train_matrices = map(np.loadtxt, glob.glob(str(MATRIX_PATH / '*.txt')))
-
+    # scanner()
     losses = np.array([mse(predict_matrix, train_matrix) for train_matrix in train_matrices])
     soft_max = ((1/losses) / (1/losses).sum())
     for language_path, confidence in zip(glob.glob(str(MATRIX_PATH / '*.txt')), soft_max):

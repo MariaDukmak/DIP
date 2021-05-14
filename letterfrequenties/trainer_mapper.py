@@ -1,20 +1,9 @@
 """Mapper file that wil map the text to pairs of letters. """
 import sys
-from typing import TextIO
 from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE
 
 # The alphabet letters
 accepted_characters = set(ACCEPTED_CHARACTERS)
-
-
-def read_data(input_stream: TextIO) -> str:
-    """
-    Reads the file and removes any leading and trailing characters.
-    :param input_stream: sys.stdin
-    :return: generator object
-    """
-    for line in input_stream:
-        yield line.strip()
 
 
 def character_transform(character: str) -> str:
@@ -30,10 +19,9 @@ def main():
     """
     Reads the file, split words in paris of letters and count it.
     """
-    data = read_data(sys.stdin)
-    for words in data:
-        for index in range(len(words) - 1):
-            c1, c2 = map(character_transform, words[index:index+2].lower())
+    for line in sys.stdin:
+        for index in range(len(line) - 1):
+            c1, c2 = map(character_transform, line[index:index+2].lower())
             sys.stdout.write(f'{c1}{CHARACTER_SPLITTER}{c2}\t{1}\n')
 
 
