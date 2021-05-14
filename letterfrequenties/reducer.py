@@ -1,7 +1,6 @@
 """Reducer file that wil reduce the results of the map function."""
 import sys
 from itertools import groupby
-from operator import itemgetter
 from typing import TextIO
 
 
@@ -21,9 +20,8 @@ def main():
     Reads the results of the mapper, and reduce the output of the count.
     """
     data = read_mapper_output(sys.stdin)
-    for current_comb, group in groupby(data, itemgetter(0)):
-        total = sum(int(count) for _, count in group)
-        sys.stdout.write(f"{current_comb}\t{total}\n")
+    for current_comb, group in groupby(data, lambda i: i[0]):
+        sys.stdout.write(f"{current_comb}\t{len(list(group))}\n")
 
 
 if __name__ == "__main__":
