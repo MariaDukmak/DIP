@@ -58,7 +58,7 @@ o-_     1
 | **_** | 0 | 0 | 0 | 0 | 1 | 0 |
 
 ## Classificeren
-Voor het testen van het algoritme maken we gebruik van [deze](https://github.com/MariaDukmak/DIP/blob/main/letterfrequenties/texst/sentences.nl-en.txt) tekst.
+Voor het testen van het algoritme maken we gebruik van [deze](https://github.com/MariaDukmak/DIP/blob/main/letterfrequenties/text/sentences.nl-en.txt) tekst.
 #### Resultaat:
 ```
 dutch   73
