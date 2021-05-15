@@ -6,7 +6,7 @@ from const import MATRIX_PATH
 
 def main():
 
-    counter = np.zeros(len(glob.glob(str(MATRIX_PATH / '*.txt'))), dtype=np.int)
+    counter = np.zeros(len(glob.glob(str(MATRIX_PATH / '*.txt'))), dtype=np.int64)
 
     for line in sys.stdin:
         if len(line) > 1:

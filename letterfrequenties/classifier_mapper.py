@@ -27,7 +27,7 @@ def main():
             normalized_matrix = matrix / matrix.sum()
 
             min_index = np.argmin(np.array([mse(normalized_matrix, class_matrix) for class_matrix in matrices]))
-            one_hot_vector = np.zeros(len(matrices), dtype=np.int)
+            one_hot_vector = np.zeros(len(matrices), dtype=np.int64)
             one_hot_vector[min_index] = 1
             sys.stdout.write(f"{'-'.join(map(str, one_hot_vector))}\n")
 
