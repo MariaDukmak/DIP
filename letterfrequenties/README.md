@@ -67,7 +67,7 @@ english 118
 
 We hebben ervoor gekozen om lege regels niet te classificeren en daarom is er eentje minder geteld.  
 Verder komen deze resultaten heel erg overeen met:
-> Je c  ode werkt goed als er 73 Nederlandstalige en 119 Engelstalige regels worden herkend.
+> Je code werkt goed als er 73 Nederlandstalige en 119 Engelstalige regels worden herkend.
 
 ### Interne werking
 Dit is een voorbeeldje van hoe de volgende tekst geclassificeerd zou worden regel voor regel.
