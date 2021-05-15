@@ -19,10 +19,10 @@ def main():
     """
     Read the file, split words in paris of letters and count it.
     """
-    for line in sys.stdin:
+    for l, line in enumerate(sys.stdin):
         for index in range(len(line) - 1):
             c1, c2 = map(character_transform, line[index:index+2].lower())
-            sys.stdout.write(f'{c1}{CHARACTER_SPLITTER}{c2}\t{1}\n')
+            sys.stdout.write(f'{c1}{CHARACTER_SPLITTER}{c2}\t{1}\t{l}\n')
 
 
 if __name__ == "__main__":
