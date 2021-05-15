@@ -17,7 +17,7 @@ def character_transform(character: str) -> str:
 
 def main():
     """
-    Reads the file, split words in paris of letters and count it.
+    Read the file, split words in paris of letters and count it.
     """
     for line in sys.stdin:
         for index in range(len(line) - 1):

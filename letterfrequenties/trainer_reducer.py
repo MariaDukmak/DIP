@@ -14,7 +14,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    #results with the whole text
-    #engels.txt.ig: 65.15 %
-    #nederlands.txt.ig: 34.85 %
