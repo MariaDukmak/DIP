@@ -5,7 +5,7 @@ Onze mini Hadoop oftewel "[Hadopy](https://github.com/MariaDukmak/Hadopy)", is v
 
 
 ## Algoritme trainen 
-Voor het "trainen" van ons algoritme hebben we gebruik gemaakt van twee verschillende  [teksten](https://github.com/MariaDukmak/DIP/tree/main/letterfrequenties/tekst). 
+Voor het "trainen" van ons algoritme hebben we gebruik gemaakt van twee verschillende  [teksten](https://github.com/MariaDukmak/DIP/tree/main/letterfrequenties/text). 
 
 *dutch.txt*
 ```bash 
@@ -58,7 +58,7 @@ o-_     1
 | **_** | 0 | 0 | 0 | 0 | 1 | 0 |
 
 ## Classificeren
-Voor het testen van het algoritme maken we gebruik van [deze](https://github.com/MariaDukmak/DIP/blob/main/letterfrequenties/tekst/sentences.nl-en.txt) tekst.
+Voor het testen van het algoritme maken we gebruik van [deze](https://github.com/MariaDukmak/DIP/blob/main/letterfrequenties/texst/sentences.nl-en.txt) tekst.
 #### Resultaat:
 ```
 dutch   73
