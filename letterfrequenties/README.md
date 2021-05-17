@@ -112,9 +112,11 @@ We vonden het ook nog interresant om de getrainde matrixen te visualizeren als h
 om te kijken of daar goed aan te zien is wat het verschil tussen de talen zijn.
 
 ![Dutch heatmap](images/dutch-matrix.png)
+
 Hier zien we dat de meeste voorkomende letters combinatie is "en", dat betekent dat veel Nederlandse woorden beginnen en/of eindigen met deze twee letters. 
 
 
 
 ![English heatmap](images/english-matrix.png)
+
 Hier zien we dat in de twee matrices best een verschil zit. Het grootste verschil ligt hier juist bij dat een Engelse woord meestal met een "e " eindigt. 
