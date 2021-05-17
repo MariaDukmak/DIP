@@ -2,6 +2,7 @@
 import sys
 from const import ACCEPTED_CHARACTERS, CHARACTER_SPLITTER, SPACE
 
+
 # The alphabet letters
 accepted_characters = set(ACCEPTED_CHARACTERS)
 
