@@ -18,10 +18,10 @@ class MessageId:
 
 
 class Message(metaclass=abc.ABCMeta):
-    def __init__(self, message_id: Optional[MessageId], source: Optional[Computer], destination: Computer, value: Optional[Any]):
+    def __init__(self, message_id: Optional[MessageId], src: Optional[Computer], dst: Computer, value: Optional[Any]):
         self.id = message_id
-        self.source = source
-        self.destination = destination
+        self.source = src
+        self.destination = dst
         self.value = value
 
 
