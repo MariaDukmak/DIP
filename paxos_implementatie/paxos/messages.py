@@ -11,10 +11,15 @@ class MessageId:
         self.source_id = source_id
 
     def __gt__(self, other):
-        if self.n != other.n:
+        if other is None:
+            return True
+        elif self.n != other.n:
             return self.n > other.n
         else:
             return self.source_id > other.source_id
+
+    def __str__(self):
+        return f"n={self.n}"
 
 
 class Message(metaclass=abc.ABCMeta):
@@ -25,7 +30,7 @@ class Message(metaclass=abc.ABCMeta):
         self.value = value
 
     def __str__(self):
-        return f'{self.source} -> {self.destination} '
+        return f'{self.source} -> {self.destination}'
 
 
 class Propose(Message):

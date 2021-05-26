@@ -46,9 +46,7 @@ class Acceptor(Computer):
         self.sleep = True
 
     def update_greatest_msg_id(self, message_id: messages.MessageId):
-        if self.greatest_msg_id is None:
-            self.greatest_msg_id = message_id
-        elif message_id > self.greatest_msg_id:
+        if message_id > self.greatest_msg_id:
             self.greatest_msg_id = message_id
 
 
