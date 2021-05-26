@@ -59,9 +59,6 @@ def setup_simulation(simulation_input: str):
 
 def simulate(network: Network, tmax: int, events: Dict[int, Event]):
     output = ""
-    # een hele domme oplossing maar goed :)
-    propose_value = None
-    accepted_value = None
 
     for t in range(tmax):
         if len(network) == 0 or len(events) == 0:
@@ -75,7 +72,6 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             message = network.extract_massage()
             if message is not None:
                 network.deliver_message(message)
-                accepted_value = message.value
                 output += f'{t:03}: {message}\n'
             else:
                 output += f'{t:03}:\n'
@@ -93,19 +89,19 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             if message_destination is not None and message_value is not None:
                 message = messages.Propose(message_destination, message_value)
                 network.deliver_message(message)
-                propose_value = message.value
                 output += f'{t:03}:{message}\n'
 
     for p in network.proposers:
         if len(network.queue) == 0:
-            output += f'\n{p} heeft wel consensus (voorgesteld: {propose_value} , geaccepteerd: {accepted_value})\n'
+            output += f'\n{p} heeft wel consensus (voorgesteld: {p.suggested_value} , geaccepteerd: {p.accepted_value})\n'
         else:
             output += f'{p} heeft geen consensus.\n'
+
     print(output)
 
     return output
 
 
 if __name__ == "__main__":
-    # run_simulation("1 3 15\n0 PROPOSE 1 42\n0 END")
-    run_simulation("2 3 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    run_simulation("1 3 15\n0 PROPOSE 1 42\n0 END")
+    # run_simulation("2 3 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")

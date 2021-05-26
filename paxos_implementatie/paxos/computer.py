@@ -62,6 +62,8 @@ class Proposer(Computer):
     def __init__(self, computer_id: int, network: Network):
         super(Proposer, self).__init__(computer_id, network)
         self.promises = 0
+        self.accepted_value = None
+        self.suggested_value = None
 
     @staticmethod
     def _next_message_id() -> int:
@@ -80,14 +82,17 @@ class Proposer(Computer):
                 for a in self.network.acceptors:
                     self.network.queue_message(messages.Accept(incoming_m.id, self, a, incoming_m.value))
                 self.promises = 0
+
         # TODO: fix wat met de output van dit moet gebeuren
         elif type(incoming_m) == messages.Accepted:
             self.promises += 1
             if self.majority_message():
                 self.promises = 0
+            self.accepted_value = incoming_m.value
 
         elif type(incoming_m) == messages.Propose:
             self.promises = 0
+            self.suggested_value = incoming_m.value
             message_id = messages.MessageId(Proposer._next_message_id(), self.id)
             for a in self.network.acceptors:
                 self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
