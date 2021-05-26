@@ -16,6 +16,9 @@ class Computer(metaclass=abc.ABCMeta):
         """Receives a message from another machine/Network??"""
         raise NotImplementedError
 
+    def __str__(self):
+        return str(self.id + 1)
+
 
 class Acceptor(Computer):
     def __init__(self, computer_id: int, network: Network):
@@ -48,6 +51,9 @@ class Acceptor(Computer):
     def update_greatest_msg_id(self, message_id: messages.MessageId):
         if message_id > self.greatest_msg_id:
             self.greatest_msg_id = message_id
+
+    def __str__(self):
+        return 'A' + super(Acceptor, self).__str__()
 
 
 class Proposer(Computer):
@@ -87,4 +93,7 @@ class Proposer(Computer):
                 self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
 
         self.sleep = True
+
+    def __str__(self):
+        return f"P{super(Proposer, self).__str__()}"
 
