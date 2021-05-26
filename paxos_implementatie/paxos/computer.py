@@ -43,7 +43,7 @@ class Acceptor(Computer):
                 self.network.queue_message(messages.Accepted(incoming_m.id, self, incoming_m.source, incoming_m.value))
 
         else:
-            self.network.queue_message(messages.Rejected(incoming_m.id, self, incoming_m.source))
+            self.network.queue_message(messages.Rejected(incoming_m.id, self, incoming_m.source, incoming_m.value))
 
         # TODO: maak een count voor accepted messages, check of je dit echt wilt!
 
@@ -77,7 +77,6 @@ class Proposer(Computer):
 
     def receive_message(self, incoming_m: messages.Message):
         self.sleep = False
-
         if type(incoming_m) == messages.Promise:
             incoming_m: messages.Promise
             self.promises += 1
@@ -103,6 +102,12 @@ class Proposer(Computer):
             for a in self.network.acceptors:
                 self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
 
+        elif type(incoming_m) == messages.Rejected:
+            if incoming_m.id == self.working_id:
+                message_id = messages.MessageId(Proposer._next_message_id(), self.id)
+                self.working_id = message_id
+                for a in self.network.acceptors:
+                    self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
         self.sleep = True
 
     def __str__(self):

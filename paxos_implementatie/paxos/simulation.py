@@ -1,8 +1,8 @@
 from typing import Dict
-from computer import Acceptor, Proposer
-from network import Network
-from event import Event
-import messages
+from paxos_implementatie.paxos.computer import Acceptor, Proposer
+from paxos_implementatie.paxos.network import Network
+from paxos_implementatie.paxos.event import Event
+from paxos_implementatie.paxos.messages import *
 
 
 def run_simulation(input_string: str) -> str:
@@ -79,21 +79,21 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             # Ignore the queue this tick, the event is more important
             for computer in event.fails:
                 computer.failed = True
-                output += f'** {computer.id} kapot **\n'
+                output += f'{t:03}: ** {computer} kapot **\n'
 
             for computer in event.repairs:
                 computer.failed = False
-                output += f'** {computer.id} gerepareerd **\n'
+                output += f'{t:03}: ** {computer} gerepareerd **\n'
 
             if event.message_destination is not None and event.message_value is not None:
-                message = messages.Propose(event.message_destination, event.message_value)
+                message = Propose(event.message_destination, event.message_value)
                 network.deliver_message(message)
                 output += f'{t:03}:{message}\n'
 
     output += '\n'
     for p in network.proposers:
         if len(network.queue) == 0:
-            output += f'\n{p} heeft wel consensus (voorgesteld: {p.suggested_value} , geaccepteerd: {p.accepted_value})\n'
+            output += f'{p} heeft wel consensus (voorgesteld: {p.suggested_value}, geaccepteerd: {p.accepted_value})\n'
         else:
             output += f'{p} heeft geen consensus.\n'
 
@@ -104,4 +104,4 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
 
 if __name__ == "__main__":
     run_simulation("1 3 15\n0 PROPOSE 1 42\n0 END")
-    # run_simulation("2 3 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    run_simulation("2 3 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")

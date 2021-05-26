@@ -45,7 +45,7 @@ class Propose(Message):
         super().__init__(None, None, message_destination, message_value)
 
     def __str__(self):
-        return f"\t-> {self.destination} {type(self).__name__} v={self.value}"
+        return f"\t-> {self.destination} {type(self).__name__.upper()} v={self.value}"
 
 
 class Prepare(Message):
@@ -55,7 +55,7 @@ class Prepare(Message):
 
     def __str__(self):
         # Computer.id moet aangepast worden
-        return f"{super(Prepare, self).__str__()} {type(self).__name__} {self.id}"
+        return f"{super(Prepare, self).__str__()} {type(self).__name__.upper()} {self.id}"
 
 
 class Promise(Message):
@@ -67,7 +67,7 @@ class Promise(Message):
 
     def __str__(self):
         # Computer.id moet aangepast worden, en de Prior list
-        return f"{super(Promise, self).__str__()} {type(self).__name__} {self.id} Prior:(n={self.prior_n}, v={self.prior_v})"
+        return f"{super(Promise, self).__str__()} {type(self).__name__.upper()} {self.id} Prior:(n={self.prior_n}, v={self.prior_v})"
 
 
 class Accept(Message):
@@ -76,7 +76,7 @@ class Accept(Message):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return f"{super(Accept, self).__str__()} {type(self).__name__} {self.id} v={self.value}"
+        return f"{super(Accept, self).__str__()} {type(self).__name__.upper()} {self.id} v={self.value}"
 
 
 class Accepted(Message):
@@ -85,7 +85,7 @@ class Accepted(Message):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return f"{super(Accepted, self).__str__()} {type(self).__name__} {self.id} v={self.value}"
+        return f"{super(Accepted, self).__str__()} {type(self).__name__.upper()} {self.id} v={self.value}"
 
 
 class Rejected(Message):
@@ -94,7 +94,7 @@ class Rejected(Message):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return f"{super(Rejected, self).__str__()} {type(self).__name__}"
+        return f"{super(Rejected, self).__str__()} {type(self).__name__.upper()} {self.id}"
 
 
 # voor learner nodig
@@ -104,4 +104,4 @@ class Success(Message):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return f"{super(Success, self).__str__()} {type(self).__name__}"
+        return f"{super(Success, self).__str__()} {type(self).__name__.upper()}"
