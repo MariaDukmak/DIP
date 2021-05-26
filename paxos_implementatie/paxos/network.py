@@ -7,6 +7,8 @@ class Network:
 
     def __init__(self):
         self.queue = []
+        self.acceptors = []
+        self.proposers = []
 
     def __len__(self):
         return len(self.queue)

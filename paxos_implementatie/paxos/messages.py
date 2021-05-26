@@ -49,8 +49,10 @@ class Prepare(Message):
 
 class Promise(Message):
 
-    def __init__(self, message_id, message_source, message_destination, message_value):
+    def __init__(self, message_id, message_source, message_destination, message_value, prior_n, prior_v):
         super().__init__(message_id, message_source, message_destination, message_value)
+        self.prior_n = prior_n
+        self.prior_v = prior_v
 
     def __str__(self):
         # Computer.id moet aangepast worden, en de Prior list

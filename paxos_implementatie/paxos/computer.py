@@ -21,6 +21,7 @@ class Acceptor(Computer):
     def __init__(self, computer_id: int, network: Network):
         super(Acceptor, self).__init__(computer_id, network)
         self.greatest_msg_id = None
+        self.prior_n, self.prior_v = None, None
 
     def receive_message(self, incoming_m: messages.Message):
         self.sleep = False
