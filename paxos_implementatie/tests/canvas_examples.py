@@ -1,4 +1,5 @@
 from unittest import TestCase, main
+from paxos_implementatie.paxos import simulation
 
 
 class CanvasExamples(TestCase):
@@ -27,7 +28,7 @@ class CanvasExamples(TestCase):
             P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)
             """
         # TODO
-        simulation_output = ""
+        simulation_output = simulation.run_simulation(simulation_input)
         self.assertEqual(simulation_output, expected_output)
 
     def test_example2(self):

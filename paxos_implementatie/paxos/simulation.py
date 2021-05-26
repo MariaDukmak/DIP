@@ -84,11 +84,11 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             tick, fails, repairs, message_destination, message_value = event
             for computer in fails:
                 computer.failed = True
-                print(f'** {computer.id} kapot **')
+                output += f'** {computer.id} kapot **\n'
 
             for computer in repairs:
                 computer.failed = False
-                print(f'** {computer.id} gerepareerd **')
+                output += f'** {computer.id} gerepareerd **\n'
 
             if message_destination is not None and message_value is not None:
                 message = messages.Propose(message_destination, message_value)
