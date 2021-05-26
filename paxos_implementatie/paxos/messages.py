@@ -29,71 +29,66 @@ class Message(metaclass=abc.ABCMeta):
 
 
 class Propose(Message):
-    name = "PROPOSE"
 
     def __init__(self, message_destination, message_value):
         super().__init__(None, None, message_destination, message_value)
 
     def __str__(self):
-        return super(Propose, self).__str__() + f' {self.name} v={self.value}'
+        return f"\t-> {self.destination} {type(self).__name__} v={self.value}"
 
 
 class Prepare(Message):
-    name = "PREPARE"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Prepare, self).__str__() + f' {self.name} n= {Computer.id}'
+        # Computer.id moet aangepast worden
+        return f"{super(Prepare, self).__str__()} {type(self).__name__} {self.id}"
 
 
 class Promise(Message):
-    name = "PROMISE"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Promise, self).__str__() + f' {self.name} n= {Computer.id} Prior:({None})'
+        # Computer.id moet aangepast worden, en de Prior list
+        return f"{super(Promise, self).__str__()} {type(self).__name__} {self.id} Prior:(n={self.prior_n}, v={self.prior_v})"
 
 
 class Accept(Message):
-    name = "ACCEPT"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Accept, self).__str__() + f' {self.name}'
+        return f"{super(Accept, self).__str__()} {type(self).__name__} {self.id} v={self.value}"
 
 
 class Accepted(Message):
-    name = "ACCEPTED"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Accepted, self).__str__() + f' {self.name}'
+        return f"{super(Accepted, self).__str__()} {type(self).__name__} {self.id} v={self.value}"
 
 
 class Rejected(Message):
-    name = "REJECTED"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Rejected, self).__str__() + f' {self.name}'
+        return f"{super(Rejected, self).__str__()} {type(self).__name__}"
 
 
 # voor learner nodig
 class Success(Message):
-    name = "SUCCESS"
 
     def __init__(self, message_id, message_source, message_destination, message_value):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        return super(Success, self).__str__() + f' {self.name}'
+        return f"{super(Success, self).__str__()} {type(self).__name__}"

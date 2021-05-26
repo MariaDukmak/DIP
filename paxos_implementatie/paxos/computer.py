@@ -22,20 +22,25 @@ class Acceptor(Computer):
         super(Acceptor, self).__init__(computer_id, network)
         self.greatest_msg_id = None
 
-    def receive_message(self, message: messages.Message):
+    def receive_message(self, incoming_m: messages.Message):
         self.sleep = False
 
-        if type(message) == messages.Promise:
-            pass
-        elif type(message) == messages.Accepted:
-            pass
-        elif type(message) == messages.Propose:
-            # alle Aacceptors in netwerk krijgen (messages.Prepare, n)
-            pass
-        elif type(message) == messages.Promise:
-            pass
-        elif type(message) == messages.Prepare:
-            pass
+        if incoming_m.id > self.greatest_msg_id:
+            if type(incoming_m) == messages.Prepare:
+                self.network.queue_message(messages.Promise(incoming_m.id, self, incoming_m.source, incoming_m.value,
+                                                            self.prior_n, self.prior_v))
+
+            elif type(incoming_m) == messages.Accept:
+                self.prior_n = incoming_m.id
+                self.prior_v = incoming_m.value
+                # for c in [incoming_m.source] + self.network.acceptors:
+                #     if c is not self:
+                self.network.queue_message(messages.Accepted(incoming_m.id, self, incoming_m.source, incoming_m.value))
+
+        else:
+            self.network.queue_message(messages.Rejected(incoming_m.id, self, incoming_m.source))
+
+        # TODO: maak een count voor accepted messages, check of je dit echt wilt!
 
         self.sleep = True
 
@@ -51,19 +56,36 @@ class Proposer(Computer):
 
     def __init__(self, computer_id: int, network: Network):
         super(Proposer, self).__init__(computer_id, network)
+        self.promises = 0
 
     @staticmethod
     def _next_message_id() -> int:
         Proposer.n += 1
         return Proposer.n
 
-    def receive_message(self, message: messages.Message):
+    def majority_message(self):
+        return self.promises > len(self.network.acceptors)/2
+
+    def receive_message(self, incoming_m: messages.Message):
         self.sleep = False
 
-        if type(message) == messages.Promise:
-            pass
-        elif type(message) == messages.Accepted:
-            pass
+        if type(incoming_m) == messages.Promise:
+            self.promises += 1
+            if self.majority_message():
+                for a in self.network.acceptors:
+                    self.network.queue_message(messages.Accept(incoming_m.id, self, a, incoming_m.value))
+                self.promises = 0
+        # TODO: fix wat met de output van dit moet gebeuren
+        elif type(incoming_m) == messages.Accepted:
+            self.promises += 1
+            if self.majority_message():
+                self.promises = 0
+
+        elif type(incoming_m) == messages.Propose:
+            self.promises = 0
+            message_id = messages.MessageId(Proposer._next_message_id(), self.id)
+            for a in self.network.acceptors:
+                self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
 
         self.sleep = True
 
