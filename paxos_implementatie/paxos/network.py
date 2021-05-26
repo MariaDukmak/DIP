@@ -1,4 +1,4 @@
-import messages
+from paxos_implementatie.paxos import messages
 from typing import List
 
 

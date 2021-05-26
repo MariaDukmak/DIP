@@ -35,7 +35,7 @@ def setup_simulation(simulation_input: str):
 
                 elif event_type == 'FAIL':
                     computer_type, computer_id = rest
-                    computer = network.proposers[int(computer_id)] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)]
+                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)-1]
                     if tick in events:
                         events[tick].fails.append(computer)
                     else:
@@ -43,7 +43,7 @@ def setup_simulation(simulation_input: str):
 
                 elif event_type == 'RECOVER':
                     computer_type, computer_id = rest
-                    computer = network.proposers[int(computer_id)] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)]
+                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)-1]
                     if tick in events:
                         events[tick].repairs.append(computer)
                     else:
@@ -56,6 +56,7 @@ def setup_simulation(simulation_input: str):
 
 
 def simulate(network: Network, tmax: int, events: Dict[int, Event]):
+    Proposer.n = 0
     output = ""
 
     for t in range(tmax):
@@ -89,6 +90,7 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
                 network.deliver_message(message)
                 output += f'{t:03}:{message}\n'
 
+    output += '\n'
     for p in network.proposers:
         if len(network.queue) == 0:
             output += f'\n{p} heeft wel consensus (voorgesteld: {p.suggested_value} , geaccepteerd: {p.accepted_value})\n'

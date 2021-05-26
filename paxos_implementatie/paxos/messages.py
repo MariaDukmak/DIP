@@ -18,6 +18,12 @@ class MessageId:
         else:
             return self.source_id > other.source_id
 
+    def __eq__(self, other):
+        return self.n == other.n and self.source_id == other.source_id
+
+    def __ge__(self, other):
+        return self > other or self == other
+
     def __str__(self):
         return f"n={self.n}"
 

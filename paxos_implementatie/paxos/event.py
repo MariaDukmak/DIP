@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Any, Optional
-from computer import Computer
+from paxos_implementatie.paxos.computer import Computer
 
 
 @dataclass

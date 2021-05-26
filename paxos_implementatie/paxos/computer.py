@@ -1,6 +1,6 @@
 import abc
-import messages
-from network import Network
+from paxos_implementatie.paxos import messages
+from paxos_implementatie.paxos.network import Network
 
 
 class Computer(metaclass=abc.ABCMeta):
@@ -29,13 +29,14 @@ class Acceptor(Computer):
     def receive_message(self, incoming_m: messages.Message):
         self.sleep = False
 
-        if incoming_m.id > self.greatest_msg_id:
+        self.update_greatest_msg_id(incoming_m.id)
+        if incoming_m.id >= self.greatest_msg_id:
             if type(incoming_m) == messages.Prepare:
                 self.network.queue_message(messages.Promise(incoming_m.id, self, incoming_m.source, incoming_m.value,
                                                             self.prior_n, self.prior_v))
 
             elif type(incoming_m) == messages.Accept:
-                self.prior_n = incoming_m.id
+                self.prior_n = incoming_m.id.n
                 self.prior_v = incoming_m.value
                 # for c in [incoming_m.source] + self.network.acceptors:
                 #     if c is not self:
@@ -64,6 +65,7 @@ class Proposer(Computer):
         self.promises = 0
         self.accepted_value = None
         self.suggested_value = None
+        self.working_id = 0
 
     @staticmethod
     def _next_message_id() -> int:
@@ -77,10 +79,13 @@ class Proposer(Computer):
         self.sleep = False
 
         if type(incoming_m) == messages.Promise:
+            incoming_m: messages.Promise
             self.promises += 1
+            if incoming_m.prior_v is not None:
+                self.accepted_value = incoming_m.prior_v
             if self.majority_message():
                 for a in self.network.acceptors:
-                    self.network.queue_message(messages.Accept(incoming_m.id, self, a, incoming_m.value))
+                    self.network.queue_message(messages.Accept(incoming_m.id, self, a, self.accepted_value))
                 self.promises = 0
 
         # TODO: fix wat met de output van dit moet gebeuren
@@ -88,12 +93,13 @@ class Proposer(Computer):
             self.promises += 1
             if self.majority_message():
                 self.promises = 0
-            self.accepted_value = incoming_m.value
 
         elif type(incoming_m) == messages.Propose:
             self.promises = 0
             self.suggested_value = incoming_m.value
+            self.accepted_value = incoming_m.value
             message_id = messages.MessageId(Proposer._next_message_id(), self.id)
+            self.working_id = message_id
             for a in self.network.acceptors:
                 self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
 
