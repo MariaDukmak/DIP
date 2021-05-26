@@ -1,16 +1,14 @@
-from typing import List, Optional
-from computer import Acceptor, Proposer, Computer
+from typing import Dict
+from computer import Acceptor, Proposer
 from network import Network
 from event import Event
 import messages
 
 
+def run_simulation(input_string: str) -> str:
+    setup = setup_simulation(input_string)
+    return simulate(*setup)
 
-def get_event_on_tick(events: List[Event], tick: int) -> Optional[Event]:
-    for event in events:
-        if event.tick == tick:
-            events.remove(event)
-            return event
 
 def setup_simulation(simulation_input: str):
     network = Network()
@@ -61,12 +59,12 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
     output = ""
 
     for t in range(tmax):
-        if len(network) == 0 or len(events) == 0:
+        if len(network) == 0 and len(events) == 0:
             # The simulation ends when there are no messages or events
-            print(f'{t:03}:')
-            return
+            output += f'{t:03}:\n'
+            break
 
-        event = get_event_on_tick(events, t)
+        event = events.get(t)
         if event is None:
             # There is no event on this tick, proceed normally
             message = network.extract_massage()
@@ -76,18 +74,18 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             else:
                 output += f'{t:03}:\n'
         else:
+            events.pop(t)
             # Ignore the queue this tick, the event is more important
-            tick, fails, repairs, message_destination, message_value = event
-            for computer in fails:
+            for computer in event.fails:
                 computer.failed = True
                 output += f'** {computer.id} kapot **\n'
 
-            for computer in repairs:
+            for computer in event.repairs:
                 computer.failed = False
                 output += f'** {computer.id} gerepareerd **\n'
 
-            if message_destination is not None and message_value is not None:
-                message = messages.Propose(message_destination, message_value)
+            if event.message_destination is not None and event.message_value is not None:
+                message = messages.Propose(event.message_destination, event.message_value)
                 network.deliver_message(message)
                 output += f'{t:03}:{message}\n'
 
