@@ -63,7 +63,7 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
     for t in range(tmax):
         if len(network) == 0 and len(events) == 0:
             # The simulation ends when there are no messages or events
-            output += f'{t:03}:\n'
+            output += f'{t:05}:\n'
             break
 
         event = events.get(t)
@@ -75,22 +75,22 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
                     network.deliver_message(message)
                 output += f'{t:05}: {message}\n'
             else:
-                output += f'{t:03}:\n'
+                output += f'{t:05}:\n'
         else:
             events.pop(t)
             # Ignore the queue this tick, the event is more important
             for computer in event.fails:
                 computer.failed = True
-                output += f'{t:03}: ** {computer} kapot **\n'
+                output += f'{t:05}: ** {computer} kapot **\n'
 
             for computer in event.repairs:
                 computer.failed = False
-                output += f'{t:03}: ** {computer} gerepareerd **\n'
+                output += f'{t:05}: ** {computer} gerepareerd **\n'
 
             if event.message_destination is not None and event.message_value is not None:
                 message = Propose(event.message_destination, event.message_value)
                 network.deliver_message(message)
-                output += f'{t:03}:{message}\n'
+                output += f'{t:05}:{message}\n'
 
     output += '\n'
     for p in network.proposers:
