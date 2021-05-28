@@ -1,4 +1,9 @@
 import abc
+import glob
+
+import numpy as np
+import os
+
 from paxos_implementatie.paxos import messages
 from paxos_implementatie.paxos.network import Network
 
@@ -91,7 +96,9 @@ class Proposer(Computer):
         elif type(incoming_m) == messages.Accepted:
             self.promises += 1
             if self.majority_message():
-                self.promises = 0
+                for c in self.network.learners:
+                    self.network.queue_message(messages.Success(incoming_m.id, self, c, incoming_m.value))
+            self.promises = 0
 
         elif type(incoming_m) == messages.Propose:
             self.promises = 0
@@ -113,3 +120,36 @@ class Proposer(Computer):
     def __str__(self):
         return f"P{super(Proposer, self).__str__()}"
 
+
+class Learner(Computer):
+
+    def __init__(self, computer_id: int, network: Network):
+        super(Learner, self).__init__(computer_id, network)
+        self.matrices = {}
+        self.learned_n = 0
+
+    def receive_message(self, incoming_m: messages.Message):
+        if type(incoming_m) == messages.Success:
+            self.create_matrix(incoming_m.value)
+            self.network.queue_message(messages.Predicted(self, self.learned_n))
+
+        else:
+            pass
+
+    def create_matrix(self, value): # nl:gr
+        characters = 'abcdefghijklmnopqrstuwxyz '
+        language, *letter_combi = value.split(':')
+        letter_combi = [l if l in characters else '!' for l in ':'.join(letter_combi)]
+        file_path = os.path.join('learned_matrices', language + '.np')
+
+        if file_path in glob.glob('learned_matrices/*.np'):
+            matrix = np.loadtxt(file_path)
+        else:
+            matrix = np.zeros([len(characters)] * 2)
+
+        matrix[characters.index(letter_combi[0]), characters.index(letter_combi[1])] += 1
+        np.savetxt(file_path, matrix)
+        self.learned_n += 1
+
+    def __str__(self):
+        return f'L{super(Learner, self).__str__()}'

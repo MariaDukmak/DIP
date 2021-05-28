@@ -9,6 +9,8 @@ class Network:
         self.queue = []
         self.acceptors = []
         self.proposers = []
+        # added learners
+        self.learners = []
 
     def __len__(self):
         return len(self.queue)

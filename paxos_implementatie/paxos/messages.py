@@ -97,7 +97,6 @@ class Rejected(Message):
         return f"{super(Rejected, self).__str__()} {type(self).__name__.upper()} {self.id}"
 
 
-# voor learner nodig
 class Success(Message):
 
     def __init__(self, message_id, message_source, message_destination, message_value):
@@ -105,3 +104,13 @@ class Success(Message):
 
     def __str__(self):
         return f"{super(Success, self).__str__()} {type(self).__name__.upper()}"
+
+
+class Predicted(Message):
+    def __init__(self, message_source, learned):
+        super().__init__(None, message_source, None, None)
+        self.learned = learned
+
+    def __str__(self):
+        return f"{super(Predicted, self).__str__()} {type(self).__name__.upper()}" \
+               f" heeft er {self.learned} letter combinatie geleerd."

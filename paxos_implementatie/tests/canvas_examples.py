@@ -5,7 +5,7 @@ from paxos_implementatie.paxos import simulation
 class CanvasExamples(TestCase):
     def test_example1(self):
         """Example 1 from the canvas page."""
-        simulation_input = "1 3 15\n" \
+        simulation_input = "1 3 0 15\n" \
                            "0 PROPOSE 1 42\n" \
                            "0 END"
 
@@ -30,7 +30,7 @@ class CanvasExamples(TestCase):
 
     def test_example2(self):
         """Example 2 from the canvas page."""
-        simulation_input = "2 3 50\n" \
+        simulation_input = "2 3 0 50\n" \
                            "0 PROPOSE 1 42\n" \
                            "8 FAIL PROPOSER 1\n" \
                            "11 PROPOSE 2 37\n" \

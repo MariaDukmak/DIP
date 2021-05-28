@@ -1,5 +1,5 @@
 from typing import Dict
-from paxos_implementatie.paxos.computer import Acceptor, Proposer
+from paxos_implementatie.paxos.computer import Acceptor, Proposer, Learner
 from paxos_implementatie.paxos.network import Network
 from paxos_implementatie.paxos.event import Event
 from paxos_implementatie.paxos.messages import *
@@ -19,9 +19,10 @@ def setup_simulation(simulation_input: str):
     for i, line in enumerate(input_lines):
         if i == 0:
             # First line
-            n_proposers, n_acceptors, tmax = map(int, line.split(' '))
+            n_proposers, n_acceptors, n_learners, tmax = map(int, line.split(' '))
             network.proposers = [Proposer(p, network) for p in range(n_proposers)]
             network.acceptors = [Acceptor(a, network) for a in range(n_acceptors)]
+            network.learners = [Learner(l, network) for l in range(n_learners)]
         else:
             if line == '0 END':
                 break
@@ -30,8 +31,8 @@ def setup_simulation(simulation_input: str):
                 tick = int(tick)
 
                 if event_type == 'PROPOSE':
-                    p_i, v = rest
-                    events[tick] = Event(tick, [], [], network.proposers[int(p_i)-1], v)
+                    p_i, *v = rest
+                    events[tick] = Event(tick, [], [], network.proposers[int(p_i)-1], ' '.join(v))
 
                 elif event_type == 'FAIL':
                     computer_type, computer_id = rest
@@ -70,8 +71,9 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
             # There is no event on this tick, proceed normally
             message = network.extract_massage()
             if message is not None:
-                network.deliver_message(message)
-                output += f'{t:03}: {message}\n'
+                if type(message) != Predicted:
+                    network.deliver_message(message)
+                output += f'{t:05}: {message}\n'
             else:
                 output += f'{t:03}:\n'
         else:
@@ -103,5 +105,8 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
 
 
 if __name__ == "__main__":
-    run_simulation("1 3 15\n0 PROPOSE 1 42\n0 END")
-    run_simulation("2 3 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    # run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
+    # run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:f"
+                   "\n400 PROPOSE 1 en: g\n500 PROPOSE 1 en:gr\n600 PROPOSE 1 en:re\n700 PROPOSE 1 en:ea"
+                   "\n800 PROPOSE 1 en:at\n900 PROPOSE 1 en:t \n0 END")
