@@ -59,7 +59,7 @@ class Acceptor(Computer):
             self.greatest_msg_id = message_id
 
     def __str__(self):
-        return 'A' + super(Acceptor, self).__str__()
+        return f"A{super(Acceptor, self).__str__()}"
 
 
 class Proposer(Computer):

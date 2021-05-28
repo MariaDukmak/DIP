@@ -24,6 +24,8 @@ class Network:
         for i in range(len(self.queue)):
             message = self.queue[i]
 
+            if type(message) == messages.Predicted:
+                return self.queue.pop(i)
             if not message.source.failed and not message.destination.failed:
                 return self.queue.pop(i)
 
