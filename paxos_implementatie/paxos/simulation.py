@@ -1,4 +1,5 @@
-from typing import Dict
+"""Parse the input into events and runs the simulation."""
+from typing import Dict, Union
 from paxos_implementatie.paxos.computer import Acceptor, Proposer, Learner
 from paxos_implementatie.paxos.network import Network
 from paxos_implementatie.paxos.event import Event
@@ -6,11 +7,13 @@ from paxos_implementatie.paxos.messages import *
 
 
 def run_simulation(input_string: str) -> str:
+    """Runs the simulation with the parsed input."""
     setup = setup_simulation(input_string)
     return simulate(*setup)
 
 
-def setup_simulation(simulation_input: str):
+def setup_simulation(simulation_input: str) -> tuple[Network, Union[int, Any], dict[int, Event]]:
+    """Parse the input string into events that the simulation can run."""
     network = Network()
     events = {}
     tmax = 0
@@ -36,7 +39,9 @@ def setup_simulation(simulation_input: str):
 
                 elif event_type == 'FAIL':
                     computer_type, computer_id = rest
-                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)-1]
+                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER' \
+                        else network.acceptors[int(computer_id)-1]
+
                     if tick in events:
                         events[tick].fails.append(computer)
                     else:
@@ -44,7 +49,9 @@ def setup_simulation(simulation_input: str):
 
                 elif event_type == 'RECOVER':
                     computer_type, computer_id = rest
-                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER' else network.acceptors[int(computer_id)-1]
+                    computer = network.proposers[int(computer_id)-1] if computer_type == 'PROPOSER'\
+                        else network.acceptors[int(computer_id)-1]
+
                     if tick in events:
                         events[tick].repairs.append(computer)
                     else:
@@ -56,14 +63,14 @@ def setup_simulation(simulation_input: str):
     return network, tmax, events
 
 
-def simulate(network: Network, tmax: int, events: Dict[int, Event]):
+def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
+    """Runs every event in the events per tik."""
     Proposer.n = 0
     output = ""
 
     for t in range(tmax):
         if len(network) == 0 and len(events) == 0:
             # The simulation ends when there are no messages or events
-            output += f'{t:05}:\n'
             break
 
         event = events.get(t)
@@ -106,7 +113,7 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]):
 
 if __name__ == "__main__":
     # run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
-    # run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
-    run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:f"
-                   "\n400 PROPOSE 1 en: g\n500 PROPOSE 1 en:gr\n600 PROPOSE 1 en:re\n700 PROPOSE 1 en:ea"
-                   "\n800 PROPOSE 1 en:at\n900 PROPOSE 1 en:t \n0 END")
+    run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    # run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:f"
+    #                "\n400 PROPOSE 1 en: g\n500 PROPOSE 1 en:gr\n600 PROPOSE 1 en:re\n700 PROPOSE 1 en:ea"
+    #                "\n800 PROPOSE 1 en:at\n900 PROPOSE 1 en:t \n0 END")

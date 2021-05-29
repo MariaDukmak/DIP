@@ -1,10 +1,8 @@
-import abc
-import glob
-
 import numpy as np
 import os
+import glob
 
-from paxos_implementatie.paxos import messages
+from paxos_implementatie.paxos.messages import *
 from paxos_implementatie.paxos.network import Network
 
 
@@ -17,11 +15,12 @@ class Computer(metaclass=abc.ABCMeta):
         self.sleep = True
 
     @abc.abstractmethod
-    def receive_message(self, message: messages.Message):
-        """Receives a message from another machine/Network??"""
-        raise NotImplementedError
+    def receive_message(self, message: Message) -> Exception:
+        """Receives a message from another machine in the network."""
+        raise NotImplementedError("This function does only work for the subclasses Acceptor and Proposer!")
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Prints the id of the computer, we begin at 1."""
         return str(self.id + 1)
 
 
@@ -29,36 +28,41 @@ class Acceptor(Computer):
     def __init__(self, computer_id: int, network: Network):
         super(Acceptor, self).__init__(computer_id, network)
         self.greatest_msg_id = None
-        self.prior_n, self.prior_v = None, None
+        self.prior_n = None
+        self.prior_v = None
 
-    def receive_message(self, incoming_m: messages.Message):
+    def receive_message(self, incoming_m: Message) -> None:
+        """
+        Receives messages from the netwerk, based on that it reply to the message.
+        :param incoming_m: a message in the netwerk queue
+        """
+        # Acceptor is awake
         self.sleep = False
 
+        # Check the greatest id in the netwerk
         self.update_greatest_msg_id(incoming_m.id)
+        # Check if this propose id greater than the previous one
         if incoming_m.id >= self.greatest_msg_id:
-            if type(incoming_m) == messages.Prepare:
-                self.network.queue_message(messages.Promise(incoming_m.id, self, incoming_m.source, incoming_m.value,
-                                                            self.prior_n, self.prior_v))
-
-            elif type(incoming_m) == messages.Accept:
-                self.prior_n = incoming_m.id.n
-                self.prior_v = incoming_m.value
-                # for c in [incoming_m.source] + self.network.acceptors:
-                #     if c is not self:
-                self.network.queue_message(messages.Accepted(incoming_m.id, self, incoming_m.source, incoming_m.value))
-
+            # Prepare -> Promise + prior (previous accept of exist)
+            if isinstance(incoming_m, Prepare):
+                self.network.queue_message(Promise(incoming_m.id, self, incoming_m.source, incoming_m.value,
+                                                   self.prior_n, self.prior_v))
+            # Accept -> Accepted + update prior
+            elif isinstance(incoming_m, Accept):
+                self.prior_n, self.prior_v = incoming_m.id.n, incoming_m.value
+                self.network.queue_message(Accepted(incoming_m.id, self, incoming_m.source, incoming_m.value))
         else:
-            self.network.queue_message(messages.Rejected(incoming_m.id, self, incoming_m.source, incoming_m.value))
+            # Reject propose if id is less than the previous one
+            self.network.queue_message(Rejected(incoming_m.id, self, incoming_m.source, incoming_m.value))
 
-        # TODO: maak een count voor accepted messages, check of je dit echt wilt!
-
+        # Acceptor back to sleep
         self.sleep = True
 
-    def update_greatest_msg_id(self, message_id: messages.MessageId):
+    def update_greatest_msg_id(self, message_id: MessageId) -> None:
         if message_id > self.greatest_msg_id:
             self.greatest_msg_id = message_id
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"A{super(Acceptor, self).__str__()}"
 
 
@@ -77,47 +81,47 @@ class Proposer(Computer):
         Proposer.n += 1
         return Proposer.n
 
-    def majority_message(self):
-        return self.promises > len(self.network.acceptors)/2
+    def majority_message(self) -> bool:
+        return self.promises > len(self.network.acceptors) / 2
 
-    def receive_message(self, incoming_m: messages.Message):
+    def receive_message(self, incoming_m: Message) -> None:
         self.sleep = False
-        if type(incoming_m) == messages.Promise:
-            incoming_m: messages.Promise
+
+        if isinstance(incoming_m, Promise):
+            incoming_m: Promise
             self.promises += 1
             if incoming_m.prior_v is not None:
                 self.accepted_value = incoming_m.prior_v
             if self.majority_message():
                 for a in self.network.acceptors:
-                    self.network.queue_message(messages.Accept(incoming_m.id, self, a, self.accepted_value))
+                    self.network.queue_message(Accept(incoming_m.id, self, a, self.accepted_value))
                 self.promises = 0
 
-        # TODO: fix wat met de output van dit moet gebeuren
-        elif type(incoming_m) == messages.Accepted:
-            self.promises += 1
-            if self.majority_message():
-                for c in self.network.learners:
-                    self.network.queue_message(messages.Success(incoming_m.id, self, c, incoming_m.value))
-            self.promises = 0
-
-        elif type(incoming_m) == messages.Propose:
+        elif isinstance(incoming_m, Propose):
             self.promises = 0
             self.suggested_value = incoming_m.value
             self.accepted_value = incoming_m.value
-            message_id = messages.MessageId(Proposer._next_message_id(), self.id)
+            message_id = MessageId(Proposer._next_message_id(), self.id)
             self.working_id = message_id
             for a in self.network.acceptors:
-                self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
+                self.network.queue_message(Prepare(message_id, self, a, incoming_m.value))
 
-        elif type(incoming_m) == messages.Rejected:
+        elif isinstance(incoming_m, Accepted):
+            self.promises += 1
+            if self.majority_message():
+                for c in self.network.learners:
+                    self.network.queue_message(Success(incoming_m.id, self, c, incoming_m.value))
+            self.promises = 0
+
+        elif isinstance(incoming_m, Rejected):
             if incoming_m.id == self.working_id:
-                message_id = messages.MessageId(Proposer._next_message_id(), self.id)
+                message_id = MessageId(Proposer._next_message_id(), self.id)
                 self.working_id = message_id
                 for a in self.network.acceptors:
-                    self.network.queue_message(messages.Prepare(message_id, self, a, incoming_m.value))
+                    self.network.queue_message(Prepare(message_id, self, a, incoming_m.value))
         self.sleep = True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"P{super(Proposer, self).__str__()}"
 
 
@@ -128,15 +132,15 @@ class Learner(Computer):
         self.matrices = {}
         self.learned_n = 0
 
-    def receive_message(self, incoming_m: messages.Message):
-        if type(incoming_m) == messages.Success:
+    def receive_message(self, incoming_m: Message) -> None:
+        if isinstance(incoming_m, Success):
             self.create_matrix(incoming_m.value)
-            self.network.queue_message(messages.Predicted(self, self.learned_n))
+            self.network.queue_message(Predicted(self, self.learned_n))
 
         else:
-            pass
+            raise AttributeError("This type message doesn't exist for Learner")
 
-    def create_matrix(self, value): # nl:gr
+    def create_matrix(self, value: str) -> None:
         characters = 'abcdefghijklmnopqrstuwxyz '
         language, *letter_combi = value.split(':')
         letter_combi = [l if l in characters else '!' for l in ':'.join(letter_combi)]
@@ -151,5 +155,5 @@ class Learner(Computer):
         np.savetxt(file_path, matrix)
         self.learned_n += 1
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'L{super(Learner, self).__str__()}'

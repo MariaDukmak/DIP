@@ -22,7 +22,6 @@ class CanvasExamples(TestCase):
                           "010: A1 -> P1 ACCEPTED n=1 v=42\n"\
                           "011: A2 -> P1 ACCEPTED n=1 v=42\n"\
                           "012: A3 -> P1 ACCEPTED n=1 v=42\n"\
-                          "013:\n"\
                           "\n"\
                           "P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)\n"
         simulation_output = simulation.run_simulation(simulation_input)
@@ -80,7 +79,6 @@ class CanvasExamples(TestCase):
                           "041: A1 -> P1 ACCEPTED n=3 v=42\n" \
                           "042: A2 -> P1 ACCEPTED n=3 v=42\n" \
                           "043: A3 -> P1 ACCEPTED n=3 v=42\n" \
-                          "044:\n" \
                           "\n" \
                           "P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)\n" \
                           "P2 heeft wel consensus (voorgesteld: 37, geaccepteerd: 42)\n"\
