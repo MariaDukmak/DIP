@@ -45,6 +45,7 @@ class Acceptor(Computer):
         :param incoming_m: a message in the netwerk queue
         """
         # Acceptor is awake
+        # This doesn't do anything practical but you can think of it as a finite state machine
         self.sleep = False
 
         # Check the greatest id in the netwerk
@@ -114,7 +115,7 @@ class Proposer(Computer):
         # This doesn't do anything practical but you can think of it as a finite state machine
         self.sleep = False
 
-
+        # Propose -> Prepare
         if isinstance(incoming_m, Propose):
             self.promises = 0
             self.suggested_value = incoming_m.value
@@ -143,6 +144,7 @@ class Proposer(Computer):
                     self.network.queue_message(Success(incoming_m.id, self, c, incoming_m.value))
             self.promises = 0
 
+        # Rejected -> Prepare
         elif isinstance(incoming_m, Rejected):
             if incoming_m.id == self.working_id:
                 message_id = MessageId(Proposer._next_message_id(), self.id)
