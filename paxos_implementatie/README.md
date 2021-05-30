@@ -1,4 +1,4 @@
-# Opdracht 3: Paxos-implementatie
+# Paxos-implementatie
 In deze opdracht moeten wij het Paxos algoritme implementeren. Ook voegen we later een uitbreiding[Fase 2] toe waarin we een deel van de vorige opdracht toevoegen aan het algoritme.
 
 ## Fase 1

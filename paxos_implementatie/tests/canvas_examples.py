@@ -12,19 +12,19 @@ class CanvasExamples(TestCase):
                            "0 PROPOSE 1 42\n" \
                            "0 END"
 
-        expected_output = "000:\t-> P1 PROPOSE v=42\n"\
-                          "001: P1 -> A1 PREPARE n=1\n"\
-                          "002: P1 -> A2 PREPARE n=1\n"\
-                          "003: P1 -> A3 PREPARE n=1\n"\
-                          "004: A1 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
-                          "005: A2 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
-                          "006: A3 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
-                          "007: P1 -> A1 ACCEPT n=1 v=42\n"\
-                          "008: P1 -> A2 ACCEPT n=1 v=42\n"\
-                          "009: P1 -> A3 ACCEPT n=1 v=42\n"\
-                          "010: A1 -> P1 ACCEPTED n=1 v=42\n"\
-                          "011: A2 -> P1 ACCEPTED n=1 v=42\n"\
-                          "012: A3 -> P1 ACCEPTED n=1 v=42\n"\
+        expected_output = "00000:\t-> P1 PROPOSE v=42\n"\
+                          "00001: P1 -> A1 PREPARE n=1\n"\
+                          "00002: P1 -> A2 PREPARE n=1\n"\
+                          "00003: P1 -> A3 PREPARE n=1\n"\
+                          "00004: A1 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
+                          "00005: A2 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
+                          "00006: A3 -> P1 PROMISE n=1 Prior:(n=None, v=None)\n"\
+                          "00007: P1 -> A1 ACCEPT n=1 v=42\n"\
+                          "00008: P1 -> A2 ACCEPT n=1 v=42\n"\
+                          "00009: P1 -> A3 ACCEPT n=1 v=42\n"\
+                          "00010: A1 -> P1 ACCEPTED n=1 v=42\n"\
+                          "00011: A2 -> P1 ACCEPTED n=1 v=42\n"\
+                          "00012: A3 -> P1 ACCEPTED n=1 v=42\n"\
                           "\n"\
                           "P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)\n"
         simulation_output = simulation.run_simulation(simulation_input)

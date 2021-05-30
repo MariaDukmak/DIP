@@ -50,6 +50,7 @@ class Acceptor(Computer):
 
         # Check the greatest id in the netwerk
         self.update_greatest_msg_id(incoming_m.id)
+
         # Check if this propose id greater than the previous one
         if incoming_m.id >= self.greatest_msg_id:
             # Prepare -> Promise + prior (previous accept of exist)
