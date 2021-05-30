@@ -18,6 +18,10 @@ def run_simulation(input_string: str) -> str:
     :param input_string: the string input
     :return: output string of the simulation
     """
+    # Clear the learned matrices a before beginning a new simulation
+    for f in glob.glob('learned_matrices/*.np'):
+        os.remove(f)
+
     setup = setup_simulation(input_string)
     return simulate(*setup)
 
@@ -152,7 +156,6 @@ def plot_matrix():
         plt.ylabel("First characters")
         plt.savefig(f"images/{lang}-matrix.png")
         plt.show()
-
 
 
 if __name__ == "__main__":
