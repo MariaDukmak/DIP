@@ -39,7 +39,7 @@ class Acceptor(Computer):
 
     def receive_message(self, incoming_m: Message) -> None:
         """
-        Receives messages from the netwerk, based on that it reply to the message
+        Receives messages from the netwerk, based on that it reply with a new message
 
         :param incoming_m: a message in the netwerk queue
         """
@@ -57,7 +57,8 @@ class Acceptor(Computer):
             # Accept -> Accepted + update prior
             elif isinstance(incoming_m, Accept):
                 self.prior_n, self.prior_v = incoming_m.id.n, incoming_m.value
-                self.network.queue_message(Accepted(incoming_m.id, self, incoming_m.source, incoming_m.value))
+                self.network.queue_message(Accepted(incoming_m.id, self,  incoming_m.source, incoming_m.value))
+
         else:
             # Reject propose if id is less than the previous one
             self.network.queue_message(Rejected(incoming_m.id, self, incoming_m.source, incoming_m.value))
@@ -90,16 +91,41 @@ class Proposer(Computer):
 
     @staticmethod
     def _next_message_id() -> int:
+        """
+        Get id for the next propose
+        :return: int of the next id
+        """
         Proposer.n += 1
         return Proposer.n
 
     def majority_message(self) -> bool:
+        """
+        Check if the majority of the acceptors has response
+        :return: boolen, true or false
+        """
         return self.promises > len(self.network.acceptors) / 2
 
     def receive_message(self, incoming_m: Message) -> None:
+        """
+        Receives messages from the netwerk, based on that it reply with a new message
+        :param incoming_m: a message in the netwerk queue
+        """
+        # Proposer is awake
+        # This doesn't do anything practical but you can think of it as a finite state machine
         self.sleep = False
 
-        if isinstance(incoming_m, Promise):
+
+        if isinstance(incoming_m, Propose):
+            self.promises = 0
+            self.suggested_value = incoming_m.value
+            self.accepted_value = incoming_m.value
+            message_id = MessageId(Proposer._next_message_id(), self.id)
+            self.working_id = message_id
+            for a in self.network.acceptors:
+                self.network.queue_message(Prepare(message_id, self, a, incoming_m.value))
+
+        # Promise -> Accept
+        elif isinstance(incoming_m, Promise):
             incoming_m: Promise
             self.promises += 1
             if incoming_m.prior_v is not None:
@@ -109,15 +135,7 @@ class Proposer(Computer):
                     self.network.queue_message(Accept(incoming_m.id, self, a, self.accepted_value))
                 self.promises = 0
 
-        elif isinstance(incoming_m, Propose):
-            self.promises = 0
-            self.suggested_value = incoming_m.value
-            self.accepted_value = incoming_m.value
-            message_id = MessageId(Proposer._next_message_id(), self.id)
-            self.working_id = message_id
-            for a in self.network.acceptors:
-                self.network.queue_message(Prepare(message_id, self, a, incoming_m.value))
-
+        # Accepted ->S
         elif isinstance(incoming_m, Accepted):
             self.promises += 1
             if self.majority_message():
@@ -147,6 +165,8 @@ class Learner(Computer):
     def receive_message(self, incoming_m: Message) -> None:
         if isinstance(incoming_m, Success):
             self.create_matrix(incoming_m.value)
+            for a in self.network.acceptors:
+                a.prior_v, a.prior_n = None, None
             self.network.queue_message(Predicted(self, self.learned_n))
 
         else:

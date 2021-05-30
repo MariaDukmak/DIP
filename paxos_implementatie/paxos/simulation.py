@@ -1,9 +1,17 @@
 """Parse the input into events and runs the simulation."""
+import glob
+import os
+from pathlib import Path
 from typing import Dict, Union
-from paxos_implementatie.paxos.computer import Acceptor, Proposer, Learner
-from paxos_implementatie.paxos.network import Network
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+from paxos_implementatie.paxos.computer import *
 from paxos_implementatie.paxos.event import Event
 from paxos_implementatie.paxos.messages import *
+from paxos_implementatie.paxos.network import Network
 
 
 def run_simulation(input_string: str) -> str:
@@ -111,6 +119,7 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
                 computer.failed = False
                 output += f'{t:05}: ** {computer} gerepareerd **\n'
 
+            # start a propose using the external output
             if event.message_destination is not None and event.message_value is not None:
                 message = Propose(event.message_destination, event.message_value)
                 network.deliver_message(message)
@@ -118,6 +127,7 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
 
     output += '\n'
     for p in network.proposers:
+        # if there is no messages moren to deliver
         if len(network.queue) == 0:
             output += f'{p} heeft wel consensus (voorgesteld: {p.suggested_value}, geaccepteerd: {p.accepted_value})\n'
         else:
@@ -128,9 +138,29 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
     return output
 
 
+def plot_matrix():
+    CHARACTERS = 'abcdefghijklmnopqrstuwxyz '
+    MATRIX_PATH = Path('learned_matrices')
+    matrices = list(map(np.loadtxt, glob.glob(str(MATRIX_PATH / '*.np'))))
+    languages = [os.path.basename(path)[:-3] for path in glob.glob(str(MATRIX_PATH / '*.np'))]
+    for matrix, lang in zip(matrices, languages):
+        ax = sns.heatmap(matrix, center=0, xticklabels=CHARACTERS, yticklabels=CHARACTERS)
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=100)
+        plt.title(f"{lang.upper()} MATRIX")
+        plt.xlabel("Second character")
+        plt.ylabel("First characters")
+        plt.savefig(f"images/{lang}-matrix.png")
+        plt.show()
+
+
+
 if __name__ == "__main__":
     # run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
     run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
-    # run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:f"
-    #                "\n400 PROPOSE 1 en: g\n500 PROPOSE 1 en:gr\n600 PROPOSE 1 en:re\n700 PROPOSE 1 en:ea"
-    #                "\n800 PROPOSE 1 en:at\n900 PROPOSE 1 en:t \n0 END")
+    # run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:aa\n400 PROPOSE 1 nl:f "
+    #                "\n500 PROPOSE 1 en: g\n600 PROPOSE 1 en:gr\n700 PROPOSE 1 en:re\n800 PROPOSE 1 en:ea"
+    # #                "\n900 PROPOSE 1 en:at\n1000 PROPOSE 1 en:t \n0 END")
+
+    # plot_matrix()
+

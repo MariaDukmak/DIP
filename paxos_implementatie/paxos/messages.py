@@ -1,6 +1,7 @@
+"""Contains all messages types for the paxos also include a message id checker."""
 from __future__ import annotations
-import abc
 from typing import Optional, Any, TYPE_CHECKING
+import abc
 if TYPE_CHECKING:
     from computer import Computer
 
@@ -66,7 +67,6 @@ class Promise(Message):
         self.prior_v = prior_v
 
     def __str__(self):
-        # Computer.id moet aangepast worden, en de Prior list
         return f"{super(Promise, self).__str__()} {type(self).__name__.upper()} {self.id} Prior:(n={self.prior_n}, v={self.prior_v})"
 
 
