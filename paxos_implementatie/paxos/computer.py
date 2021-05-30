@@ -16,11 +16,17 @@ class Computer(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def receive_message(self, message: Message) -> Exception:
-        """Receives a message from another machine in the network."""
+        """
+        Receive a message from another machine in the network
+        :param message:
+        :return:
+        """
         raise NotImplementedError("This function does only work for the subclasses Acceptor and Proposer!")
 
     def __str__(self) -> str:
-        """Prints the id of the computer, we begin at 1."""
+        """
+        Prints the id of the computer, we begin at 1.
+        """
         return str(self.id + 1)
 
 
@@ -33,7 +39,8 @@ class Acceptor(Computer):
 
     def receive_message(self, incoming_m: Message) -> None:
         """
-        Receives messages from the netwerk, based on that it reply to the message.
+        Receives messages from the netwerk, based on that it reply to the message
+
         :param incoming_m: a message in the netwerk queue
         """
         # Acceptor is awake
@@ -59,6 +66,11 @@ class Acceptor(Computer):
         self.sleep = True
 
     def update_greatest_msg_id(self, message_id: MessageId) -> None:
+        """
+        Update the greatest message id locally using MessageId class
+
+        :param message_id: the id of the message
+        """
         if message_id > self.greatest_msg_id:
             self.greatest_msg_id = message_id
 

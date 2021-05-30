@@ -7,13 +7,23 @@ from paxos_implementatie.paxos.messages import *
 
 
 def run_simulation(input_string: str) -> str:
-    """Runs the simulation with the parsed input."""
+    """
+    Run the simulation with the parsed input
+
+    :param input_string: the string input
+    :return: output string of the simulation
+    """
     setup = setup_simulation(input_string)
     return simulate(*setup)
 
 
 def setup_simulation(simulation_input: str) -> tuple[Network, Union[int, Any], dict[int, Event]]:
-    """Parse the input string into events that the simulation can run."""
+    """
+    Parse the input string into events that the simulation can run
+
+    :param simulation_input: the input string
+    :return: tuple of the network, max tik and events.
+    """
     network = Network()
     events = {}
     tmax = 0
@@ -64,7 +74,14 @@ def setup_simulation(simulation_input: str) -> tuple[Network, Union[int, Any], d
 
 
 def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
-    """Runs every event in the events per tik."""
+    """
+    Run every event per tik in the simulation and prints the messages per tik.
+
+    :param network: the network of the simulation
+    :param tmax: maximum tiks of the simulation
+    :param events: the parsed events of the simulation
+    :return: output string
+    """
     Proposer.n = 0
     output = ""
 
