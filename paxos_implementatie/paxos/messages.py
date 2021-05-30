@@ -55,7 +55,6 @@ class Prepare(Message):
         super().__init__(message_id, message_source, message_destination, message_value)
 
     def __str__(self):
-        # Computer.id moet aangepast worden
         return f"{super(Prepare, self).__str__()} {type(self).__name__.upper()} {self.id}"
 
 

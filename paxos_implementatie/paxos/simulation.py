@@ -1,11 +1,8 @@
 """Parse the input into events and runs the simulation."""
-import glob
-import os
 from pathlib import Path
 from typing import Dict, Union
 
 import matplotlib.pyplot as plt
-import numpy as np
 import seaborn as sns
 
 from paxos_implementatie.paxos.computer import *
@@ -139,6 +136,9 @@ def simulate(network: Network, tmax: int, events: Dict[int, Event]) -> str:
 
 
 def plot_matrix():
+    """
+    Plot the matrix of the letter combination as heatmap.
+    """
     CHARACTERS = 'abcdefghijklmnopqrstuwxyz '
     MATRIX_PATH = Path('learned_matrices')
     matrices = list(map(np.loadtxt, glob.glob(str(MATRIX_PATH / '*.np'))))
@@ -156,9 +156,10 @@ def plot_matrix():
 
 
 if __name__ == "__main__":
-    # run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
-    # run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
-    run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 nl:aa\n400 PROPOSE 1 nl:f "
+    run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
+    run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
+    run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 "
+                   "nl:aa\n400 PROPOSE 1 nl:f \n"
                    "\n500 PROPOSE 1 en: g\n600 PROPOSE 1 en:gr\n700 PROPOSE 1 en:re\n800 PROPOSE 1 en:ea"
                    "\n900 PROPOSE 1 en:at\n1000 PROPOSE 1 en:t \n0 END")
 
