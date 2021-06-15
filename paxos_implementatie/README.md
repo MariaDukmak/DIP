@@ -33,10 +33,10 @@ $ python -m unittest -v paxos_implementatie/tests/canvas_examples.py
 
 
 - Voorbeeld 2
-![voorbeeld_2](output/canvas_example2.1.PNG)
+![](output/canvas_example2.1.PNG)
 
 
-![voorbeeld_2](output/canvas_example2.2.PNG)  
+![](output/canvas_example2.2.PNG)  
   
 
 
