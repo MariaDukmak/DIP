@@ -1,0 +1,15 @@
+00000:	-> P1 PROPOSE v=42
+00001: P1 -> A1 PREPARE n=1
+00002: P1 -> A2 PREPARE n=1
+00003: P1 -> A3 PREPARE n=1
+00004: A1 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00005: A2 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00006: A3 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00007: P1 -> A1 ACCEPT n=1 v=42
+00008: P1 -> A2 ACCEPT n=1 v=42
+00009: P1 -> A3 ACCEPT n=1 v=42
+00010: A1 -> P1 ACCEPTED n=1 v=42
+00011: A2 -> P1 ACCEPTED n=1 v=42
+00012: A3 -> P1 ACCEPTED n=1 v=42
+
+P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)

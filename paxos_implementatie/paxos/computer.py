@@ -194,10 +194,10 @@ class Learner(Computer):
         # split the language and the letter combination
         language, *letter_combi = value.split(':')
         letter_combi = [l if l in characters else '!' for l in ':'.join(letter_combi)]
-        file_path = os.path.join('learned_matrices', language + '.np')
+        file_path = os.path.join('paxos_implementatie/paxos/learned_matrices', language + '.np')
 
         # open or create the matrix
-        if file_path in glob.glob('learned_matrices/*.np'):
+        if file_path in glob.glob('paxos_implementatie/paxos/learned_matrices/*.np'):
             matrix = np.loadtxt(file_path)
         else:
             matrix = np.zeros([len(characters)] * 2)

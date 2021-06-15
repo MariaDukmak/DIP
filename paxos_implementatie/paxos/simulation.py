@@ -161,10 +161,18 @@ def plot_matrix():
 if __name__ == "__main__":
     run_simulation("1 3 0 15\n0 PROPOSE 1 42\n0 END")
     run_simulation("2 3 0 50\n0 PROPOSE 1 42\n8 FAIL PROPOSER 1\n11 PROPOSE 2 37\n26 RECOVER PROPOSER 1\n0 END")
-    run_simulation("1 3 1 10000\n0 PROPOSE 1 nl: g\n100 PROPOSE 1 nl:ga\n200 PROPOSE 1 nl:af\n300 PROPOSE 1 "
-                   "nl:aa\n400 PROPOSE 1 nl:f \n"
-                   "\n500 PROPOSE 1 en: g\n600 PROPOSE 1 en:gr\n700 PROPOSE 1 en:re\n800 PROPOSE 1 en:ea"
+    simulation_output = run_simulation("1 3 1 10000\n"
+                   "0 PROPOSE 1 nl: g\n"
+                   "100 PROPOSE 1 nl:ga\n"
+                   "200 PROPOSE 1 nl:af\n"
+                   "300 PROPOSE 1 nl:aa\n"
+                   "400 PROPOSE 1 nl:f \n"
+                   "500 PROPOSE 1 en: g\n"
+                   "600 PROPOSE 1 en:gr\n"
+                   "700 PROPOSE 1 en:re\n"
+                   "800 PROPOSE 1 en:ea"
                    "\n900 PROPOSE 1 en:at\n1000 PROPOSE 1 en:t \n0 END")
 
     plot_matrix()
+
 

@@ -1,0 +1,47 @@
+00000:	-> P1 PROPOSE v=42
+00001: P1 -> A1 PREPARE n=1
+00002: P1 -> A2 PREPARE n=1
+00003: P1 -> A3 PREPARE n=1
+00004: A1 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00005: A2 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00006: A3 -> P1 PROMISE n=1 Prior:(n=None, v=None)
+00007: P1 -> A1 ACCEPT n=1 v=42
+00008: ** P1 kapot **
+00009:
+00010:
+00011:	-> P2 PROPOSE v=37
+00012: P2 -> A1 PREPARE n=2
+00013: P2 -> A2 PREPARE n=2
+00014: P2 -> A3 PREPARE n=2
+00015: A1 -> P2 PROMISE n=2 Prior:(n=1, v=42)
+00016: A2 -> P2 PROMISE n=2 Prior:(n=None, v=None)
+00017: A3 -> P2 PROMISE n=2 Prior:(n=None, v=None)
+00018: P2 -> A1 ACCEPT n=2 v=42
+00019: P2 -> A2 ACCEPT n=2 v=42
+00020: P2 -> A3 ACCEPT n=2 v=42
+00021: A1 -> P2 ACCEPTED n=2 v=42
+00022: A2 -> P2 ACCEPTED n=2 v=42
+00023: A3 -> P2 ACCEPTED n=2 v=42
+00024:
+00025:
+00026: ** P1 gerepareerd **
+00027: P1 -> A2 ACCEPT n=1 v=42
+00028: P1 -> A3 ACCEPT n=1 v=42
+00029: A1 -> P1 ACCEPTED n=1 v=42
+00030: A2 -> P1 REJECTED n=1
+00031: A3 -> P1 REJECTED n=1
+00032: P1 -> A1 PREPARE n=3
+00033: P1 -> A2 PREPARE n=3
+00034: P1 -> A3 PREPARE n=3
+00035: A1 -> P1 PROMISE n=3 Prior:(n=2, v=42)
+00036: A2 -> P1 PROMISE n=3 Prior:(n=2, v=42)
+00037: A3 -> P1 PROMISE n=3 Prior:(n=2, v=42)
+00038: P1 -> A1 ACCEPT n=3 v=42
+00039: P1 -> A2 ACCEPT n=3 v=42
+00040: P1 -> A3 ACCEPT n=3 v=42
+00041: A1 -> P1 ACCEPTED n=3 v=42
+00042: A2 -> P1 ACCEPTED n=3 v=42
+00043: A3 -> P1 ACCEPTED n=3 v=42
+
+P1 heeft wel consensus (voorgesteld: 42, geaccepteerd: 42)
+P2 heeft wel consensus (voorgesteld: 37, geaccepteerd: 42)
